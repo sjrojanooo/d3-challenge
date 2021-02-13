@@ -1,11 +1,10 @@
 function makeResponsive() {
     d3.csv("./assets/data/data.csv").then(function(data) {
-
         // recieve data from the csv
         console.log(data[0])
 
         data.forEach(function(data) {
-            data.healthcareLow = +data.healthcareLow
+            data.healthcare = +data.healthcare
             data.poverty = +data.poverty
             data.abbr = data.abbr
         })
@@ -34,14 +33,14 @@ function makeResponsive() {
 
         var chosenXAxis = "age";
         var xLinearScale = d3.scaleLinear()
-            .domain([0, d3.max(data, d => d.healthcareLow),
-                d3.max(data, d => d.healthcareLow)
+            .domain([d3.min(data, d => d.healthcare),
+                d3.max(data, d => d.healthcare)
             ])
             .range([0, width]);
 
         // Create y scale function
         var yLinearScale = d3.scaleLinear()
-            .domain([0, d3.max(data, d => d.poverty)])
+            .domain([6, d3.max(data, d => d.poverty)])
             .range([height, 0]);
 
         // Create initial axis functions
@@ -62,7 +61,7 @@ function makeResponsive() {
             .data(data)
             .enter()
             .append("circle")
-            .attr("cx", d => xLinearScale(d.healthcareLow))
+            .attr("cx", d => xLinearScale(d.healthcare))
             .attr("cy", d => yLinearScale(d.poverty))
             .attr("r", 12)
             .attr("fill", "cornflowerblue")
@@ -73,7 +72,7 @@ function makeResponsive() {
             .data(data)
             .enter()
             .append("text")
-            .attr("x", (d, i) => xLinearScale(d.healthcareLow))
+            .attr("x", (d, i) => xLinearScale(d.healthcare))
             .attr("y", d => (yLinearScale(d.poverty - 0.15)))
             .classed("stateText", true)
             .text(d => d.abbr)
@@ -100,7 +99,7 @@ function makeResponsive() {
             .attr("class", "tooltip")
             .offset([80, -60])
             .html(function(d) {
-                return (`<strong>${d.poverty}<strong><hr>${d.healthcareLow}
+                return (`<strong>${d.poverty}<strong><hr>${d.healthcare}
           medal(s) won`);
             });
 
