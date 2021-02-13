@@ -34,7 +34,7 @@ function makeResponsive() {
 
         var chosenXAxis = "age";
         var xLinearScale = d3.scaleLinear()
-            .domain([d3.min(data, d => d.healthcareLow),
+            .domain([0, d3.max(data, d => d.healthcareLow),
                 d3.max(data, d => d.healthcareLow)
             ])
             .range([0, width]);
